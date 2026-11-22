@@ -1,0 +1,10 @@
+{
+  "description": "An AI-powered learning platform that helps students turn notes into summaries, flashcards, and quizzes while tracking study progress.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
