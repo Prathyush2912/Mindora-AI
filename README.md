@@ -1,5 +1,5 @@
 
-# Mindora — AI-Assisted Learning
+# Mindora — AI-Assisted Learning (Current version only summarizes Notes)
 
 ## Live Demo
 
