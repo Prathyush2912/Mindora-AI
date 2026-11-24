@@ -1,6 +1,8 @@
 
 # Mindora — AI-Assisted Learning (Current version only summarizes Notes)
-
+### Team
+- **Prathyush — Product & Frontend:** Product ideation, MVP planning, frontend development, UI/UX design, and Vercel deployment.
+- **Dhruv — Technical Lead:** Backend architecture, database design, Supabase integration, authentication, and AI feature integration.
 ## Live Demo
 
 [**Launch Mindora AI**](https://mindora-ai-lovat.vercel.app)
