@@ -93,19 +93,50 @@ The intended application flow is:
 - Keep secrets in server-side environment variables.
 - Do not commit environment files or credentials to GitHub.
 
-## 6. Database planning
+## 6. Supabase database design (proposed)
 
-Supabase is the selected database platform. The final schema, relationships, access policies, and storage configuration must be agreed with the teammate responsible for database architecture.
+Supabase is the selected database platform. The following is a **proposed starting schema** for the MVP, not a record of tables that already exist. The teammate responsible for database architecture should review and approve the table names, column types, relationships, and policies before implementation.
 
-Potential data areas include:
-- Student profiles
-- Study materials and uploaded-file metadata
-- Generated summaries
-- Quiz definitions and questions
-- Quiz attempts and scores
-- Flashcard decks and cards
+### Proposed tables
 
-These are conceptual data areas, **not a confirmed list of existing Supabase tables**. Do not create or change tables based only on this document. Update this section once the actual schema has been reviewed and approved.
+| Table | Purpose | Suggested fields |
+|---|---|---|
+| `profiles` | App profile linked to a Supabase Auth user | `id` (UUID, matches auth user ID), `display_name`, `created_at`, `updated_at` |
+| `study_materials` | Uploaded study files and their metadata | `id`, `user_id`, `title`, `file_name`, `file_type`, `storage_path`, `status`, `created_at` |
+| `summaries` | AI-generated summaries for study materials | `id`, `user_id`, `study_material_id`, `title`, `content`, `created_at`, `updated_at` |
+| `quizzes` | Quiz information associated with a study material | `id`, `user_id`, `study_material_id`, `title`, `created_at` |
+| `quiz_questions` | Individual questions belonging to a quiz | `id`, `quiz_id`, `question_text`, `options`, `correct_answer`, `explanation`, `position` |
+| `quiz_attempts` | A student's completed quiz attempt and result | `id`, `user_id`, `quiz_id`, `score`, `total_questions`, `completed_at` |
+| `flashcard_decks` | A collection of flashcards | `id`, `user_id`, `study_material_id`, `title`, `created_at` |
+| `flashcards` | Individual question-and-answer cards | `id`, `deck_id`, `front`, `back`, `position`, `created_at` |
+
+These fields are suggestions only. For example, the team may choose JSONB for quiz options, a different status model for uploaded files, or additional fields for tracking flashcard review activity. Decide column types, constraints, indexes, and deletion behavior during schema review.
+
+### Proposed relationships
+
+- One authenticated user has one profile.
+- One user can own many study materials.
+- One study material can have multiple summaries, quizzes, and flashcard decks.
+- One quiz contains multiple quiz questions.
+- One user can have multiple attempts for a quiz.
+- One flashcard deck contains multiple flashcards.
+
+Use foreign keys to enforce the approved relationships. Confirm whether deleting a study material should also delete its generated content, or whether the app should preserve that content.
+
+### Security and storage considerations
+
+- Link user-owned records to the authenticated Supabase user ID.
+- Enable Row Level Security (RLS) on tables containing user data.
+- Add policies so users can only read and modify records they are authorized to access.
+- If Supabase Storage is used for uploaded files, keep files in a private bucket and use policies that restrict access to the file owner.
+- Store a storage path and metadata in the database rather than placing file contents directly in a table.
+- Never expose service-role keys in the frontend.
+
+### Approval status
+
+**Status: Proposed — not yet confirmed against the live Supabase project.**
+
+The database owner should compare this proposal with the existing Supabase project before creating, renaming, or changing any tables. Once the real schema is confirmed, replace this proposal with the actual table definitions, relationships, indexes, and RLS policies.
 
 ## 7. Frontend development notes
 
