@@ -1,6 +1,10 @@
 
 # Mindora — AI-Assisted Learning
 
+## Live Demo
+
+[**Launch Mindora AI**](https://mindora-ai-lovat.vercel.app)
+
 > Exploring the use of artificial intelligence and modern web technologies to make studying more interactive and accessible.
 
 Mindora is a personal software development project focused on building an AI-assisted learning application. It combines document processing, text extraction, OCR and AI-generated summaries to help students work with their study materials.
